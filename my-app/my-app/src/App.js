@@ -30,9 +30,16 @@ class App extends Component {
     });
   }
 
+  clickToDeleteHandler = (personIndex) => {
+    console.log("Deleting.");
+    const persons = this.state.persons;
+    persons.splice(personIndex, 1);
+    this.setState({ persons: persons });
+  }
+
   render() {
 
-    // inline styles is good for scooping to a specific component
+    // inline styles is good for scoping to a specific component
     const style = {
       backgroundColor: 'white',
       font: 'inherit',
@@ -46,9 +53,11 @@ class App extends Component {
     if (this.state.showPersons) {
       persons = (
         <div> 
-          {this.state.persons.map(person => {
+          {this.state.persons.map((person, index) => {
             return (
               <Person 
+                change={() => this.nameChangeHandler()}
+                clicked={() => this.clickToDeleteHandler(index)}
                 name={person.name}
                 age={person.age} />
             );
