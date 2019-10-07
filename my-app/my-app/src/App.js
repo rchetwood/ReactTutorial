@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
+import classes from './App.css';
 import Person from './Person/Person';
-
 
 class App extends Component {
   state = {
@@ -57,12 +56,14 @@ class App extends Component {
   render() {
 
     // inline styles is good for scoping to a specific component
+    // this can be conditionally changed using simple js
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
     };
 
     // recommended way of showing conditional compenents
@@ -72,19 +73,33 @@ class App extends Component {
         <div>
           {this.state.persons.map((person, index) => {
             return <Person
-                name={person.name}
-                age={person.age} 
-                key={index} 
-                changed={(event) => this.nameChangeHandler(event, person.id)}
-                clicked={() => this.clickToDeleteHandler(index)} />
+              name={person.name}
+              age={person.age}
+              key={index}
+              changed={(event) => this.nameChangeHandler(event, person.id)}
+              clicked={() => this.clickToDeleteHandler(index)} />
           })}
         </div>
       );
+
+      // conditionally changing style
+      style.backgroundColor = 'red';
+    }
+
+    let assignedClasses = [];
+    if (this.state.persons.length <= 2) {
+      assignedClasses.push(classes.red);
+    }
+    if (this.state.persons.length <= 1) {
+      assignedClasses.push(classes.bold);
     }
 
     return (
-      <div className="App">
+      <div className={classes.App}>
+
         <h1>Hi, I'm a React App.</h1>
+
+        <p className={assignedClasses.join(' ')}>Class names can be rendered dynamically!</p>
 
         <button
           style={style}
