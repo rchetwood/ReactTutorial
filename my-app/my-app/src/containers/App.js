@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import classes from './App.css';
-import Person from './Person/Person';
+import Person from '../components/Persons/Person/Person';
 
 class App extends Component {
   state = {
@@ -47,27 +47,16 @@ class App extends Component {
   }
 
   clickToDeleteHandler = (personIndex) => {
-    console.log("Deleting.");
     const persons = this.state.persons;
     persons.splice(personIndex, 1);
     this.setState({ persons: persons });
   }
 
   render() {
-
-    // inline styles is good for scoping to a specific component
-    // this can be conditionally changed using simple js
-    const style = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer',
-    };
-
     // recommended way of showing conditional compenents
     let persons = null;
+    let buttonClass = '';
+
     if (this.state.showPersons) {
       persons = (
         <div>
@@ -82,8 +71,7 @@ class App extends Component {
         </div>
       );
 
-      // conditionally changing style
-      style.backgroundColor = 'red';
+      buttonClass = classes.Red;
     }
 
     let assignedClasses = [];
@@ -102,7 +90,7 @@ class App extends Component {
         <p className={assignedClasses.join(' ')}>Class names can be rendered dynamically!</p>
 
         <button
-          style={style}
+          className={buttonClass}
           onClick={this.toggleNameHandler}>
           Toggle name
         </button>
