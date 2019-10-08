@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classes from './App.css';
-import Person from '../components/Persons/Person/Person';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
   state = {
@@ -55,48 +56,22 @@ class App extends Component {
   render() {
     // recommended way of showing conditional compenents
     let persons = null;
-    let buttonClass = '';
-
     if (this.state.showPersons) {
-      persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return <Person
-              name={person.name}
-              age={person.age}
-              key={index}
-              changed={(event) => this.nameChangeHandler(event, person.id)}
-              clicked={() => this.clickToDeleteHandler(index)} />
-          })}
-        </div>
-      );
-
-      buttonClass = classes.Red;
-    }
-
-    let assignedClasses = [];
-    if (this.state.persons.length <= 2) {
-      assignedClasses.push(classes.red);
-    }
-    if (this.state.persons.length <= 1) {
-      assignedClasses.push(classes.bold);
+      persons = <Persons
+        persons={this.state.persons}
+        changed={this.nameChangeHandler}
+        clicked={this.clickToDeleteHandler}
+      />
     }
 
     return (
       <div className={classes.App}>
-
-        <h1>Hi, I'm a React App.</h1>
-
-        <p className={assignedClasses.join(' ')}>Class names can be rendered dynamically!</p>
-
-        <button
-          className={buttonClass}
-          onClick={this.toggleNameHandler}>
-          Toggle name
-        </button>
-
+        <Cockpit
+          assignedClasses={assignedClasses.join(' ')}
+          buttonClass={buttonClass}
+          clicked={this.toggleNameHandler}
+        />
         {persons}
-
       </div>
     );
   }
