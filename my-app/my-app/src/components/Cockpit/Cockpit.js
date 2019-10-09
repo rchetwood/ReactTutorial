@@ -8,7 +8,7 @@ const cockpit = (props) => {
         buttonClass = classes.Red;
     }
 
-    let assignedClasses = [];
+    const assignedClasses = [];
     if (props.personsLength <= 2) {
       assignedClasses.push(classes.red);
     }
@@ -17,9 +17,9 @@ const cockpit = (props) => {
     }
 
     return (
-        <div>
-            <h1>Hi, I'm a React App.</h1>
-            <p className={props.assignedClasses}>Class names can be rendered dynamically!</p>
+        <div className={classes.Cockpit}>
+            <h1>{props.title}</h1>
+            <p className={assignedClasses.join(' ')}>Class names can be rendered dynamically!</p>
             <button
                 className={buttonClass}
                 onClick={props.clicked}>

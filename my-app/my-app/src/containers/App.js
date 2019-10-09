@@ -14,25 +14,18 @@ class App extends Component {
   };
 
   nameChangeHandler = (event, id) => {
-    // get index of person
     const personIndex = this.state.persons.findIndex(p => {
       return p.id === id;
     });
 
-    // spread operator - this is a copy of person, not reference
     const person = {
       ...this.state.persons[personIndex]
     };
-
-    // change copy
     person.name = event.target.value;
 
-    // get copy of persons array
     const persons = [
       ...this.state.persons
     ];
-
-    // update copy
     persons[personIndex] = person;
 
     this.setState({
@@ -67,8 +60,9 @@ class App extends Component {
     return (
       <div className={classes.App}>
         <Cockpit
-          assignedClasses={assignedClasses.join(' ')}
-          buttonClass={buttonClass}
+          title={this.props.appTitle}
+          showPersons={this.state.showPersons}
+          personsLength={this.state.persons.length}
           clicked={this.toggleNameHandler}
         />
         {persons}
