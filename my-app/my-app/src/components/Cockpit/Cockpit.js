@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import classes from './Cockpit.css'
+import AuthContext from '../../context/auth-context';
 
 const cockpit = (props) => {
+
+    const toggleButtonRef = useRef(null);
+    const authContext = useContext(AuthContext);
 
     // runs once in beginning and once on unmount
     useEffect(() => {
         console.log('[Cockpit.js]\t useEffect');
-        // Http request...
-        setTimeout(() => {
-            alert('Saved data to cloud!');
-        }, 1000);
+        toggleButtonRef.current.click()
         return () => {
             console.log('[Cockpit.js]\t cleanup work in useEffect');
         };
@@ -41,10 +42,12 @@ const cockpit = (props) => {
             <h1>{props.title}</h1>
             <p className={assignedClasses.join(' ')}>Class names can be rendered dynamically!</p>
             <button
+                ref={toggleButtonRef}
                 className={buttonClass}
                 onClick={props.clicked}>
                 Toggle name
             </button>
+            <button onClick={authContext.login}>Log In</button>
         </div>
     );
 }

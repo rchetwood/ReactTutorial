@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import classes from './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
+import withClass from '../hoc/withClassFunc';
+import Aux from '../hoc/Auxilary';
+import AuthContext from '../context/auth-context'
 
 class App extends Component {
 
@@ -17,8 +20,10 @@ class App extends Component {
       { id: 2, name: "Luz", age: 25 },
       { id: 3, name: "Lauren", age: 30 }
     ],
-    showPersons: true,
-    showCockpit: true
+    showPersons: false,
+    showCockpit: true,
+    changeCounter: 0,
+    isAuthenticated: false
   };
 
   // L.C. hook: On creation & update
@@ -39,44 +44,8 @@ class App extends Component {
     console.log('[App.js]\t componentDidUpdate');
   }
 
-  // L.C. hook: On creation & update
-  render() {
-    console.log('[App.js]\t render');
-    // recommended way of showing conditional compenents
-    let persons = null;
-    if (this.state.showPersons) {
-      persons = <Persons
-        persons={this.state.persons}
-        changed={this.nameChangeHandler}
-        clicked={this.clickToDeleteHandler}
-      />
-    }
-
-    return (
-      <div className={classes.App}>
-        <button
-          onClick={() => {
-            this.setState({ showCockpit: false });
-          }}
-        >
-          Remove Cockpit
-        </button>
-        {this.state.showCockpit ? (
-          <Cockpit
-            title={this.props.appTitle}
-            showPersons={this.state.showPersons}
-            personsLength={this.state.persons.length}
-            clicked={this.toggleNameHandler}
-          />
-        ) : null}
-        {persons}
-      </div>
-    );
-  }
-
-  // L.C. hook: On creation
-  componentDidMount() {
-    console.log("[App.js]\t componentDidMount");
+  loginHandler = () => {
+    this.setState({isAuthenticated: true});
   }
 
   nameChangeHandler = (event, id) => {
@@ -91,8 +60,11 @@ class App extends Component {
       ...this.state.persons
     ];
     persons[personIndex] = person;
-    this.setState({
-      persons: persons
+    this.setState((prevState, props) => {
+      return ({
+        persons: persons,
+        changeCounter: prevState.changeCounter + 1
+      });
     });
   }
 
@@ -108,6 +80,54 @@ class App extends Component {
     persons.splice(personIndex, 1);
     this.setState({ persons: persons });
   }
+
+  // L.C. hook: On creation & update
+  render() {
+    console.log('[App.js]\t render');
+    // recommended way of showing conditional compenents
+    let persons = null;
+    if (this.state.showPersons) {
+      persons = <Persons
+        persons={this.state.persons}
+        changed={this.nameChangeHandler}
+        clicked={this.clickToDeleteHandler}
+      />
+    }
+
+    return (
+      <Aux>
+          <button
+            onClick={() => {
+              this.setState({ showCockpit: false });
+            }}
+          >
+            Remove Cockpit
+        </button>
+        <AuthContext.Provider value={
+          {
+            authenticated: this.state.isAuthenticated,
+            login: this.loginHandler
+          }
+        }>
+          {this.state.showCockpit ? (
+            <Cockpit
+              title={this.props.appTitle}
+              showPersons={this.state.showPersons}
+              personsLength={this.state.persons.length}
+              clicked={this.toggleNameHandler}
+              login={this.loginHandler}
+            />
+          ) : null}
+          {persons}
+        </AuthContext.Provider>
+      </Aux>
+    );
+  }
+
+  // L.C. hook: On creation
+  componentDidMount() {
+    console.log("[App.js]\t componentDidMount");
+  }
 }
 
-export default App;
+export default withClass(App, classes.App);
