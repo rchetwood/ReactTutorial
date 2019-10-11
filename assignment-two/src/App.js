@@ -7,7 +7,7 @@ import CharComponent from './CharComponent/CharComponent';
 class App extends Component {
   state = {
     userText: "This is Sparta!",
-    textLength: 1
+    textLength: "This is Sparta!".length
   };
 
   changeLengthHandler = (event) => {
