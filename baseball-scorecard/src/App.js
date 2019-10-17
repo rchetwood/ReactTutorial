@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-import BaseballField from './components/BaseballField';
+import SimpleBaseballField from './components/SimpleBaseballField';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <BaseballField height={500} />
+        <SimpleBaseballField height={500} />
       </div>
     );
   }
