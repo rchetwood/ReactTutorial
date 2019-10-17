@@ -3,7 +3,6 @@ import React from 'react';
 const baseballField = (props) => {
 
     const xOrigin = 0;
-    const yOrigin = 0;
 
     const height = props.height;
     const widthToHeightRatio = 1.1325;
@@ -11,46 +10,34 @@ const baseballField = (props) => {
 
     const outfieldToHeightRatio = 0.46;
 
-    // line 1
-    const outfieldX1L1 = xOrigin;
-    const outfieldY1L1 = height * outfieldToHeightRatio;
+    const leftFieldCorner = height * outfieldToHeightRatio;
 
-    const outfieldX2L1 = width / 2;
-    const outfieldY2L1 = height;
+    // path for outfield
+    const outfieldStartingPoint = ["M", xOrigin, leftFieldCorner];
+    const outfieldArc = ["A", width, width * 2, 0, 0, 1, width, leftFieldCorner];
+    const rightFieldLine = ["L", ((width / 2) + (height * 0.37625)), (width - (height * 0.37625))];
+    const infieldArc = ["A", width, width * 2, 0, 0, 0, (width / 2) - (height * 0.37625), (width - (height * 0.37625))]
+    const leftFieldLine = ["L", xOrigin, leftFieldCorner]
 
-    const outfieldPoint1L1 = { x: outfieldX1L1, y: outfieldY1L1 };
-    const outfieldPoint2L1 = { x: outfieldX2L1, y: outfieldY2L1 };
+    // outfield 
+    const outfield = outfieldStartingPoint.concat(outfieldArc, rightFieldLine, infieldArc, leftFieldLine);
 
-    // line 2
-    const outfieldX1L2 = width;
-    const outfieldY1L2 = outfieldY1L1;
+    // path for infield
+    const infieldStartingPoint = ["M", (width / 2) - (height * 0.37625), (width - (height * 0.37625))];
+    const leftInfieldLine = ["L", (width/2)-63.63961, height-63.63961]
 
-
-    const outfieldPoint1L2 = { x: outfieldX1L2, y: outfieldY1L2 };
-    const outfieldPoint2L2 = outfieldPoint2L1;
-
-    // infield arc
-
-    // outfield arc
-    const outfieldArc = ["M", outfieldX1L1, outfieldY1L1,
-        "A", width, width * 2, 0, 0, 1, width, outfieldY1L1,
-        "L", , height+5-(height * 0.37625)] 
-
-    console.log(widthToHeightRatio);
-    console.log(height);
-    console.log(width);
-    console.log(outfieldPoint1L1);
-    console.log(outfieldPoint2L1);
-
+    const reverseInfieldArc = ["A",  width, width * 2, 0, 0, 1, ((width / 2) + (height * 0.37625)), (width - (height * 0.37625))]
+    const rightInfieldLine = ["L", (width/2) + 63.63961, height + 90]
+    const secondBase = ["L", width/2, height-121]
+ 
+    //infield
+    const infield = infieldStartingPoint.concat(leftInfieldLine );
     return (
-        <svg width={width+100} height={height+100}>
-                <svg width={width} height={height}>
-                    
-                    <g stroke="black" fill="white">
-                        <path d={outfieldArc.join(" ")}
-                        />
-                    </g>
-                </svg>
+        <svg width={width + 100} height={height + 100}>
+            <svg width={width} height={height}>
+                <path d={outfield.join(" ")} stroke="black" fill="green" />
+                <path d={infield.join(" ")} stroke="black" />
+            </svg>
             <circle cx={200} cy={100} r={15} fill={"red"} />
         </svg>
     );
