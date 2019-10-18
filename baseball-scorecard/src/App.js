@@ -6,7 +6,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <SimpleBaseballField height={500} />
+
+        <SimpleBaseballField height={400} />
+
       </div>
     );
   }

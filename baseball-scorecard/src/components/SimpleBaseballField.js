@@ -1,4 +1,5 @@
 import React from 'react';
+import './SimpleBaseballField.css'
 
 const simpleBaseballField = (props) => {
 
@@ -19,27 +20,31 @@ const simpleBaseballField = (props) => {
     const rightFieldStartToWidth = 0.68476;
     const rightFieldStartToHeight = 0.79096;
 
+    const leftFieldStartToWidth = 0.31523;
+    const leftFieldStartToHeight= rightFieldStartToHeight;
+
     const rightFieldEndToWidth = 1.00000;
     const rightFieldEndToHeight = 0.43431;
 
-    const rightFieldStartToViewBoxRight = 0.31524 
-
     // view box dimensions
-    const origin = { x: 0, y: 0 }
-    const height = props.height;
+    const origin = { x: 32, y: 16 }
+    const height = props.height ;
     const width = height * widthToHeight;
 
     // key points
-    const homePlate = { x: (width/2), y: height};
-    const pitchersMound = { x: (width/2), y: (height*pitchersMoundToHeight)};
-    const firstBase = { x: (width*firstBaseToWidth), y: (height*firstBaseToHeight)};
-    const secondBase = { x: (width/2), y: (height*secondBaseToHeight)};
-    const thirdBase = { x: ((width*firstBaseToWidth)-(width*firstToThirdToWidth)), y: (height*firstBaseToHeight)};
-    const leftFieldStart= { x: (width*rightFieldStartToViewBoxRight), y: (height*rightFieldStartToHeight)};
-    const leftFieldEnd = { x: origin.x, y:  (height*rightFieldEndToHeight)};
+    const homePlate = { x: origin.x + (width/2), y: height};
+    const pitchersMound = { x: origin.x + (width/2), y: (height*pitchersMoundToHeight)};
+    const firstBase = { x: origin.x + (width*firstBaseToWidth), y: (height*firstBaseToHeight)};
+    const secondBase = { x: origin.x + (width/2), y: (height*secondBaseToHeight)};
+    const thirdBase = { x: origin.x + ((width*firstBaseToWidth)-(width*firstToThirdToWidth)), y: (height*firstBaseToHeight)};
+
+    const leftFieldStart = { x: origin.x + (width*leftFieldStartToWidth), y: (height*leftFieldStartToHeight)};
+    const leftFieldEnd = { x:origin.x, y: (height*rightFieldEndToHeight)};
+
     const centerField = { x: (width/2), y: origin.y};
-    const rightFieldStart = { x: (width*rightFieldStartToWidth), y: (height*rightFieldStartToHeight)};
-    const rightFieldEnd = { x: (width*rightFieldEndToWidth), y: (height*rightFieldEndToHeight)};
+
+    const rightFieldStart = { x: origin.x + (width*rightFieldStartToWidth), y: (height*rightFieldStartToHeight)};
+    const rightFieldEnd = { x: origin.x + (width*rightFieldEndToWidth), y: (height*rightFieldEndToHeight)};
 
     // path variables
     const outfieldMajorAxis = width;
@@ -66,22 +71,44 @@ const simpleBaseballField = (props) => {
                      "L", thirdBase.x, thirdBase.y,
                      "L", homePlate.x, homePlate.y];
 
+    const points = [origin.x + width/2, ",", height+origin.y, ];
+
     return (
-        <div>
-            <svg width={width+10} height={height+10}>
-                <path d={outfield.join(" ")} stroke="black" fill="green" />
-                <path d={infieldDirt.join(" ")} stroke="black" fill="orange" />
-                <path d={infield.join(" ")} stroke="black" fill="green" />
-                <circle cx={homePlate.x} cy={homePlate.y} r={2.5} fill={"red"} />
-                <circle cx={pitchersMound.x} cy={pitchersMound.y} r={height*pitchersMoundRadiusToHeight} fill={"orange"} />
+        <div className='parent'top={10} left={10}>
+            <svg className='child' viewBox={[0,0,width+64,height+32].join(" ")} >
+                <path d={outfield.join(" ")} fill="green" />
+
+                <line x1={leftFieldStart.x} y1={leftFieldStart.y} x2={leftFieldEnd.x} y2={leftFieldEnd.y} stroke="green" strokeWidth={5} />
+                <line x1={rightFieldStart.x} y1={rightFieldStart.y} x2={rightFieldEnd.x} y2={rightFieldEnd.y} stroke="green" strokeWidth={5} />
+
+                <path d={infieldDirt.join(" ")} fill="orange" />
+                <path d={infield.join(" ")} fill="green" />
+
+                <circle cx={pitchersMound.x} cy={pitchersMound.y} r={height*pitchersMoundRadiusToHeight} fill={"orange"}/>
+
                 <circle cx={firstBase.x} cy={firstBase.y} r={2.5} fill={"red"} />
+                <circle cx={firstBase.x} cy={firstBase.y} r={height*pitchersMoundRadiusToHeight} fill={"orange"} />
+                <line x1={homePlate.x} y1={homePlate.y} x2={rightFieldStart.x} y2={rightFieldStart.y} stroke="orange" strokeWidth={5} /> 
+                
                 <circle cx={secondBase.x} cy={secondBase.y} r={2.5} fill={"red"} />
+                <circle cx={secondBase.x} cy={secondBase.y} r={height*pitchersMoundRadiusToHeight} fill={"orange"} />
+                <line x1={firstBase.x} y1={firstBase.y} x2={secondBase.x} y2={secondBase.y} stroke="orange" strokeWidth={5} /> 
+
                 <circle cx={thirdBase.x} cy={thirdBase.y} r={2.5} fill={"red"} />
-                <circle cx={leftFieldStart.x} cy={leftFieldStart.y} r={2.5} fill={"red"} />
-                <circle cx={leftFieldEnd.x} cy={leftFieldEnd.y} r={2.5} fill={"red"} />
-                <circle cx={centerField.x} cy={centerField.y} r={2.5} fill={"red"} />
-                <circle cx={rightFieldStart.x} cy={rightFieldStart.y} r={2.5} fill={"red"} />
-                <circle cx={rightFieldEnd.x} cy={rightFieldEnd.y} r={2.5} fill={"red"} />
+                <circle cx={thirdBase.x} cy={thirdBase.y} r={height*pitchersMoundRadiusToHeight} fill={"orange"} />
+                <line x1={secondBase.x} y1={secondBase.y} x2={thirdBase.x} y2={thirdBase.y} stroke="orange" strokeWidth={5} /> 
+
+                <polygon points="200,10 250,190 160,210" />
+                <line x1={origin.x + width/2} y1={height+origin.y} x2={origin.x + width+8} y2={rightFieldEnd.y + origin.y - 8} stroke="green" strokeWidth={17.75} />
+                <line x1={origin.x + width/2} y1={height+origin.y} x2={origin.x - 8} y2={leftFieldEnd.y + origin.y - 8} stroke="green" strokeWidth={17.75} />
+
+                <circle cx={homePlate.x} cy={homePlate.y} r={2.5} fill={"red"} />
+                <circle cx={homePlate.x} cy={homePlate.y} r={height*pitchersMoundRadiusToHeight} fill={"orange"} />
+                <line x1={leftFieldStart.x} y1={leftFieldStart.y} x2={homePlate.x} y2={homePlate.y} stroke="orange" strokeWidth={5} /> 
+                
+                <line x1={leftFieldEnd.x} y1={leftFieldEnd.y} x2={homePlate.x} y2={homePlate.y} stroke="white" strokeWidth={1.5} />
+                <line x1={rightFieldEnd.x} y1={rightFieldEnd.y} x2={homePlate.x} y2={homePlate.y} stroke="white" strokeWidth={1.5} />
+                
             </svg>
         </div>
     );
