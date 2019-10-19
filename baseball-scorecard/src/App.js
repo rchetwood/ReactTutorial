@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
 import SimpleBaseballField from './components/BaseballField/SimpleBaseballField';
+import ScoreBox from './components/BaseballField/ScoreBox/Scorecard'
 
 class App extends Component {
   render() {
     return (
       <div className="App">
         
-        <SimpleBaseballField height={400} />
-        <SimpleBaseballField height={500} />
-        <SimpleBaseballField height={600} />
-        <SimpleBaseballField height={1200} />
+        <ScoreBox height={400} />
 
       </div>
     );
